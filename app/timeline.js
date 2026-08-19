@@ -14,7 +14,7 @@ function renderMonths() {
     cell.className = `month-cell${TODAY.getMonth() === month && TODAY.getFullYear() === year ? ' current' : ''}`;
     cell.style.left = `calc(${left} * var(--timeline-unit))`;
     cell.style.width = `calc(${width} * var(--timeline-unit))`;
-    cell.textContent = new Intl.DateTimeFormat('fr-FR', { month: 'long' }).format(start);
+    cell.textContent = new Intl.DateTimeFormat('fr-FR', { month: 'short' }).format(start).replace('.', '');
     els.monthScale.appendChild(cell);
     cursor = new Date(year, month + 1, 1);
   }
@@ -25,7 +25,7 @@ function renderProjectRows() {
   if (!state.projects.length) {
     const empty = document.createElement('div');
     empty.className = 'empty-project-map';
-    empty.innerHTML = `<div class="empty-project-mark">${icons.spark}</div><div><strong>Aucun projet dans cet espace</strong><p>Décris simplement le premier projet à Neptune AI. L’interface n’a pas besoin d’un formulaire complexe pour démarrer.</p></div><button type="button" data-empty-ai>Créer avec Neptune AI</button>`;
+    empty.innerHTML = `<div class="empty-project-mark">${icons.spark}</div><div><strong>Aucun projet</strong></div><button type="button" data-empty-ai>Créer avec Neptune AI</button>`;
     els.projectRows.appendChild(empty);
     $('[data-empty-ai]', empty).addEventListener('click', () => openAi('Crée un nouveau projet : '));
     return;
@@ -42,13 +42,14 @@ function renderProjectRows() {
     const start = dayIndex(project.start);
     const end = dayIndex(project.end);
     const widthDays = Math.max(5, end - start + 1);
+    const stateReason = project.stateText.includes('·') ? project.stateText.split('·').slice(1).join('·').trim() : project.stateText;
 
     row.innerHTML = `
       <button class="project-label" type="button" data-open-project="${project.id}" aria-label="Ouvrir ${escapeHtml(project.name)}">
         <span class="project-symbol ${project.status}" aria-hidden="true">${escapeHtml(project.short)}</span>
         <span class="project-label-copy">
           <strong>${escapeHtml(project.name)}</strong>
-          <span class="project-state-line"><span class="state-dot ${project.status}"></span><span>${escapeHtml(project.stateText)}</span></span>
+          <span class="project-state-line"><span class="state-dot ${project.status}"></span><span>${escapeHtml(stateReason)}</span></span>
         </span>
       </button>
       <div class="project-track">
@@ -105,9 +106,16 @@ function updateZoom(nextIndex, preserveCenter = true) {
   const viewportCenter = scroll.scrollLeft + scroll.clientWidth / 2;
   const ratio = oldWidth ? viewportCenter / oldWidth : 0;
   zoomIndex = Math.max(0, Math.min(zoomLevels.length - 1, nextIndex));
-  css.setProperty('--timeline-unit', `${zoomLevels[zoomIndex]}px`);
-  $('#zoom-reset').textContent = ['9 mois', '7 mois', '6 mois', '4 mois', '3 mois'][zoomIndex];
+  const unit = fitTimelineUnit() * zoomLevels[zoomIndex];
+  css.setProperty('--timeline-unit', `${unit}px`);
+  $('#zoom-reset').textContent = ['Tout', '×1,25', '×1,55', '×1,95', '×2,5'][zoomIndex];
+  $('#zoom-out').disabled = zoomIndex === 0;
+  $('#zoom-in').disabled = zoomIndex === zoomLevels.length - 1;
   requestAnimationFrame(() => {
+    if (zoomIndex === 0) {
+      scroll.scrollLeft = 0;
+      return;
+    }
     if (preserveCenter) scroll.scrollLeft = Math.max(0, scroll.scrollWidth * ratio - scroll.clientWidth / 2);
   });
 }
