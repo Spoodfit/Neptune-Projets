@@ -3,6 +3,8 @@
 .map-header{min-height:0;margin-bottom:6px}
 .month-cell{overflow:hidden;white-space:nowrap;text-overflow:clip}
 .zoom-control button:disabled{opacity:.28;cursor:default;background:transparent}
+.project-ribbon{justify-content:center}
+.project-ribbon .ribbon-copy strong{display:none}
 
 .ai-orb{width:42px;padding:0;justify-content:center}
 .orb-label{display:none}
