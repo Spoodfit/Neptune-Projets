@@ -19,16 +19,26 @@ jobs:
           node --check service-worker.js
           node --check server.mjs
           for file in app/*.js; do node --check "$file"; done
-      - name: Check spatial product contract
+      - name: Check direct manipulation product contract
         run: |
-          test -f styles/spatial.css
-          test -f styles/spatial-refine.css
+          test -f styles/canva-light.css
+          grep -q 'id="add-project-trigger"' index.html
           grep -q 'id="project-focus"' index.html
-          grep -q 'id="project-path"' index.html
+          grep -q 'id="project-name-input"' index.html
+          grep -q 'id="project-status-select"' index.html
           grep -q 'id="role-orbit"' index.html
-          grep -q 'id="role-ask-ai"' index.html
-          grep -q 'data-resolve-blocker' app/project.js
-          grep -q "type: 'resolution'" app/ai-parse.js
-      - name: Reject prototype copy in product UI
+          grep -q 'id="task-list"' index.html
+          grep -q 'data-resize-project' app/timeline.js
+          grep -q 'beginProjectCreation' app/timeline.js
+          grep -q 'renderRoleTasks' app/project.js
+          grep -q 'project-progress-flow' app/timeline.js
+      - name: Check light visual contract
         run: |
+          grep -q 'color-scheme" content="light"' index.html
+          grep -q 'background_color.*#ffffff' manifest.webmanifest
+          grep -q 'canva-light.css' styles.css
+      - name: Reject obsolete product layers
+        run: |
+          ! grep -q 'spatial-actions.js' app.js
+          ! grep -q 'styles/spatial.css' styles.css
           ! grep -E -n 'prêt à être branché|Connexion production|Le backend pourra|fourni par l.API' index.html app/*.js
