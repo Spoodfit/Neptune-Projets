@@ -12,10 +12,10 @@ function handleAiSubmit(text) {
   }
 
   const confirmation = proposal.type === 'task-update'
-    ? `<div class="ai-confirmation"><button type="button" class="primary" data-ai-confirm="yes">Oui, mets à jour</button><button type="button" data-ai-confirm="no">Non</button></div>`
+    ? `<div class="ai-confirmation"><button type="button" class="primary" data-ai-confirm="yes">Confirmer</button><button type="button" data-ai-confirm="no">Non</button></div>`
     : proposal.type === 'project-create'
-      ? `<div class="ai-confirmation"><button type="button" class="primary" data-ai-confirm="create">Créer le projet</button><button type="button" data-ai-confirm="no">Annuler</button></div>`
-      : `<div class="ai-confirmation"><button type="button" class="primary" data-ai-confirm="note">Ajouter au journal</button><button type="button" data-ai-confirm="no">Annuler</button></div>`;
+      ? `<div class="ai-confirmation"><button type="button" class="primary" data-ai-confirm="create">Créer</button><button type="button" data-ai-confirm="no">Annuler</button></div>`
+      : `<div class="ai-confirmation"><button type="button" class="primary" data-ai-confirm="note">Noter</button><button type="button" data-ai-confirm="no">Annuler</button></div>`;
 
   const message = appendAiMessage('assistant', `<p>${proposal.message}</p>${confirmation}`);
   $$('[data-ai-confirm]', message).forEach((button) => button.addEventListener('click', () => {
@@ -29,23 +29,23 @@ function handleAiSubmit(text) {
         openRole(proposal.project, proposal.role.id);
       }
       message.querySelector('.ai-confirmation')?.remove();
-      appendAiMessage('assistant', `<p>C’est fait. La carte et les prochaines actions utilisent maintenant ce nouvel état.</p>`);
-      toast('Mise à jour enregistrée');
+      appendAiMessage('assistant', '<p>Mis à jour.</p>');
+      toast('Mis à jour');
     } else if (action === 'create' && proposal.type === 'project-create') {
       state.projects.push(proposal.project);
       state.projectSets[state.workspace.id] = state.projects;
       persistState();
       refreshTimelineView();
       message.querySelector('.ai-confirmation')?.remove();
-      appendAiMessage('assistant', `<p>Projet créé. Tu peux maintenant me dire ce qui doit être fait, qui en est responsable ou quelle échéance tu vises.</p>`);
+      appendAiMessage('assistant', '<p>Projet créé.</p>');
       toast('Projet créé');
     } else if (action === 'note') {
       message.querySelector('.ai-confirmation')?.remove();
-      appendAiMessage('assistant', `<p>Ajouté au journal local du projet. Le backend pourra ensuite synchroniser ce journal pour toute l’organisation.</p>`);
-      toast('Ajouté au journal');
+      appendAiMessage('assistant', '<p>Noté dans le projet.</p>');
+      toast('Noté');
     } else {
       message.querySelector('.ai-confirmation')?.remove();
-      appendAiMessage('assistant', `<p>D’accord, je ne modifie rien.</p>`);
+      appendAiMessage('assistant', '<p>Aucune modification.</p>');
     }
   }));
 }
@@ -68,7 +68,7 @@ function toast(message) {
   el.className = 'toast';
   el.textContent = message;
   els.toastRegion.appendChild(el);
-  setTimeout(() => el.remove(), 2600);
+  setTimeout(() => el.remove(), 2200);
 }
 
 function renderSearch(query = '') {
@@ -86,17 +86,17 @@ function renderSearch(query = '') {
   }
 
   if (!projectMatches.length && !taskMatches.length) {
-    els.searchResults.innerHTML = `<div class="search-empty">Aucun résultat. Neptune AI peut aussi retrouver une information à partir d’une phrase normale.</div>`;
+    els.searchResults.innerHTML = '<div class="search-empty">Aucun résultat.</div>';
     return;
   }
 
   let html = '';
   if (projectMatches.length) {
-    html += `<div class="search-section-label">Projets</div>`;
+    html += '<div class="search-section-label">Projets</div>';
     html += projectMatches.slice(0, 6).map((project) => `<button class="search-result" type="button" data-search-project="${project.id}"><span class="search-result-icon">${icons.arrow}</span><span class="search-result-copy"><strong>${escapeHtml(project.name)}</strong><span>${escapeHtml(project.stateText)}</span></span></button>`).join('');
   }
   if (taskMatches.length) {
-    html += `<div class="search-section-label">Tâches</div>`;
+    html += '<div class="search-section-label">Tâches</div>';
     html += taskMatches.slice(0, 8).map(({ project, role, task }) => `<button class="search-result" type="button" data-search-task="${project.id}|${role.id}"><span class="search-result-icon">${taskMeta(task.status).icon}</span><span class="search-result-copy"><strong>${escapeHtml(task.title)}</strong><span>${escapeHtml(project.name)} · ${escapeHtml(role.name)}</span></span></button>`).join('');
   }
   els.searchResults.innerHTML = html;
@@ -119,7 +119,7 @@ function showSheet(title, content, options = {}) {
   document.querySelector('.utility-sheet-backdrop')?.remove();
   const backdrop = document.createElement('div');
   backdrop.className = 'utility-sheet-backdrop';
-  backdrop.innerHTML = `<section class="utility-sheet" role="dialog" aria-modal="true" aria-label="${escapeHtml(title)}"><header><div><p class="eyebrow">${escapeHtml(options.kicker || 'Neptune Projets')}</p><h2>${escapeHtml(title)}</h2></div><button class="icon-button" type="button" data-close-sheet aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header><div class="utility-sheet-body">${content}</div></section>`;
+  backdrop.innerHTML = `<section class="utility-sheet" role="dialog" aria-modal="true" aria-label="${escapeHtml(title)}"><header><div><p class="eyebrow">${escapeHtml(options.kicker || 'Neptune')}</p><h2>${escapeHtml(title)}</h2></div><button class="icon-button" type="button" data-close-sheet aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header><div class="utility-sheet-body">${content}</div></section>`;
   document.body.appendChild(backdrop);
   requestAnimationFrame(() => backdrop.classList.add('is-open'));
   const close = () => { backdrop.classList.remove('is-open'); setTimeout(() => backdrop.remove(), 180); };
@@ -130,8 +130,8 @@ function showSheet(title, content, options = {}) {
 }
 
 function openWorkspaceSheet() {
-  const items = state.workspaces.map((item) => `<button type="button" class="workspace-option ${item.id === state.workspace.id ? 'is-selected' : ''}" data-workspace-id="${escapeHtml(item.id)}"><span class="workspace-option-mark">${escapeHtml(item.name.slice(0,1).toUpperCase())}</span><span><strong>${escapeHtml(item.name)}</strong><small>${item.id === state.workspace.id ? 'Espace actif' : 'Ouvrir cet espace'}</small></span>${item.id === state.workspace.id ? icons.check : icons.arrow}</button>`).join('');
-  const { backdrop, close } = showSheet('Changer d’espace', `${items}<button type="button" class="sheet-primary-action" data-create-workspace>+ Créer une organisation</button>`, { kicker: 'Multi-organisation' });
+  const items = state.workspaces.map((item) => `<button type="button" class="workspace-option ${item.id === state.workspace.id ? 'is-selected' : ''}" data-workspace-id="${escapeHtml(item.id)}"><span class="workspace-option-mark">${escapeHtml(item.name.slice(0,1).toUpperCase())}</span><span><strong>${escapeHtml(item.name)}</strong><small>${item.id === state.workspace.id ? 'Actif' : 'Ouvrir'}</small></span>${item.id === state.workspace.id ? icons.check : icons.arrow}</button>`).join('');
+  const { backdrop, close } = showSheet('Espaces', `${items}<button type="button" class="sheet-primary-action" data-create-workspace>+ Nouvelle organisation</button>`, { kicker: 'Organisation' });
   $$('[data-workspace-id]', backdrop).forEach((button) => button.addEventListener('click', () => {
     const item = state.workspaces.find((ws) => ws.id === button.dataset.workspaceId);
     if (!item) return;
@@ -142,11 +142,11 @@ function openWorkspaceSheet() {
     persistState();
     close();
     requestAnimationFrame(centerToday);
-    toast(`Espace ${item.name} ouvert`);
+    toast(item.name);
   }));
   $('[data-create-workspace]', backdrop).addEventListener('click', () => {
     const body = $('.utility-sheet-body', backdrop);
-    body.innerHTML = `<form class="simple-form" data-workspace-form><label>Nom de l’organisation<input name="name" required maxlength="60" placeholder="Ex. Studio Horizon"></label><p>Chaque organisation possède ses propres projets, membres et droits. La synchronisation multi-utilisateur sera fournie par l’API.</p><button class="sheet-primary-action" type="submit">Créer l’espace</button></form>`;
+    body.innerHTML = `<form class="simple-form" data-workspace-form><label>Nom<input name="name" required maxlength="60" placeholder="Ex. Studio Horizon"></label><button class="sheet-primary-action" type="submit">Créer</button></form>`;
     $('[data-workspace-form]', body).addEventListener('submit', (event) => {
       event.preventDefault();
       const name = new FormData(event.currentTarget).get('name').trim();
@@ -176,11 +176,12 @@ function openPeopleSheet() {
   }
   const content = people.size
     ? [...people.values()].slice(0, 12).map((person) => `<div class="people-sheet-row"><span class="role-avatar" style="background:${toneGradient(person.tone)}">${escapeHtml(person.initials)}</span><span><strong>${escapeHtml(person.name)}</strong><small>${escapeHtml(person.role)} · ${person.projects.length} projet${person.projects.length > 1 ? 's' : ''}</small></span><span class="presence-dot" title="Présence"></span></div>`).join('')
-    : '<div class="search-empty">Aucun membre n’est encore rattaché à un projet dans cet espace.</div>';
-  showSheet('Équipe', content, { kicker: 'Présence et responsabilités' });
+    : '<div class="search-empty">Aucun membre.</div>';
+  showSheet('Équipe', content, { kicker: 'Responsabilités' });
 }
+
 function openSettingsSheet() {
-  const content = `<div class="setting-block"><strong>Expérience</strong><p>L’interface privilégie la lecture visuelle. Les données chiffrées restent accessibles sur demande à Neptune AI.</p></div><div class="setting-row"><span><strong>Animations douces</strong><small>Respecte aussi le réglage système “réduire les animations”.</small></span><button class="toggle is-on" type="button" data-toggle-motion aria-pressed="true"><span></span></button></div><div class="setting-row"><span><strong>Densité de la carte</strong><small>Ajuste uniquement l’espace visuel, pas les données.</small></span><select data-density><option value="comfortable">Aérée</option><option value="compact">Compacte</option></select></div><div class="setting-block"><strong>Connexion production</strong><p>Le front est prêt pour une API d’authentification, projets, organisations et Neptune AI. Aucun secret ni token n’est stocké côté navigateur.</p></div>`;
+  const content = `<div class="setting-row"><span><strong>Animations</strong><small>Mouvements discrets de la carte.</small></span><button class="toggle is-on" type="button" data-toggle-motion aria-pressed="true"><span></span></button></div><div class="setting-row"><span><strong>Densité</strong><small>Ajuste l’espace entre les éléments.</small></span><select data-density><option value="comfortable">Normale</option><option value="compact">Dense</option></select></div>`;
   const { backdrop } = showSheet('Réglages', content, { kicker: 'Interface' });
   $('[data-toggle-motion]', backdrop).addEventListener('click', (event) => {
     const button = event.currentTarget;
