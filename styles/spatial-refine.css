@@ -1,0 +1,12 @@
+/* Final spatial refinements. */
+.focus-shell.spatial-shell{background:linear-gradient(180deg,rgba(7,19,33,.965),rgba(6,16,28,.985));backdrop-filter:blur(12px)}
+.spatial-blocker{left:clamp(110px,var(--blocker-x),calc(100% - 110px))!important}
+.spatial-blocker::after{height:72px}
+.spatial-role .role-connector{height:150px}
+.resolution-line{display:inline-block;margin-top:6px;color:#c8d8e7}
+.resolution-owner{display:inline-block;margin-top:4px;color:#738ba3;font-size:10px}
+.ai-message.assistant .resolution-line strong{color:#edf6ff}
+@media (max-width:760px){
+  .spatial-blocker{left:clamp(78px,var(--blocker-x),calc(100% - 78px))!important}
+  .spatial-blocker::after{height:56px}
+}
