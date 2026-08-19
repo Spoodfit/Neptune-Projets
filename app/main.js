@@ -18,17 +18,16 @@ function bindEvents() {
   });
 
   $('#focus-close').addEventListener('click', closeProject);
-  els.focusBackdrop.addEventListener('click', closeProject);
   $('#task-drawer-close').addEventListener('click', () => {
     els.taskDrawer.classList.remove('is-open');
     els.taskDrawer.setAttribute('aria-hidden', 'true');
+    $$('.spatial-role', els.roleOrbit).forEach((node) => node.classList.remove('is-selected'));
     activeRoleId = null;
   });
   $('#focus-ask-ai').addEventListener('click', () => {
     const project = state.projects.find((p) => p.id === activeProjectId);
     openAi(project ? `Sur ${project.name}, ` : '');
   });
-  $('#focus-more').addEventListener('click', () => toast('Les actions sensibles seront gérées par les permissions de l’organisation.'));
 
   els.aiOrb.addEventListener('click', () => els.aiPanel.classList.contains('is-open') ? closeAi() : openAi());
   $('#ai-close').addEventListener('click', closeAi);
@@ -43,7 +42,6 @@ function bindEvents() {
     event.preventDefault();
     handleAiSubmit(els.aiInput.value);
   });
-  $('.voice-button').addEventListener('click', () => toast('Le bouton vocal est prêt à être branché au service de transcription.'));
 
   $('#search-trigger').addEventListener('click', () => {
     renderSearch('');
@@ -60,6 +58,13 @@ function bindEvents() {
   });
 
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && els.taskDrawer.classList.contains('is-open')) {
+      els.taskDrawer.classList.remove('is-open');
+      els.taskDrawer.setAttribute('aria-hidden', 'true');
+      $$('.spatial-role', els.roleOrbit).forEach((node) => node.classList.remove('is-selected'));
+      activeRoleId = null;
+      return;
+    }
     if (event.key === 'Escape' && els.focus.classList.contains('is-open')) closeProject();
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
       event.preventDefault();
