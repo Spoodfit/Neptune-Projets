@@ -1,14 +1,21 @@
+let resizeTimer;
+
 function bindEvents() {
   $$('.filter-pill').forEach((button) => button.addEventListener('click', () => setFilter(button.dataset.filter)));
   $('#zoom-out').addEventListener('click', () => updateZoom(zoomIndex - 1));
   $('#zoom-in').addEventListener('click', () => updateZoom(zoomIndex + 1));
-  $('#zoom-reset').addEventListener('click', () => updateZoom(2));
+  $('#zoom-reset').addEventListener('click', () => updateZoom(0));
   els.timelineScroll.addEventListener('wheel', (event) => {
     if (event.ctrlKey || event.metaKey) {
       event.preventDefault();
       updateZoom(zoomIndex + (event.deltaY < 0 ? 1 : -1));
     }
   }, { passive: false });
+
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => updateZoom(zoomIndex, false), 80);
+  });
 
   $('#focus-close').addEventListener('click', closeProject);
   els.focusBackdrop.addEventListener('click', closeProject);
@@ -64,8 +71,12 @@ function bindEvents() {
 }
 
 function centerToday() {
+  if (els.timelineScroll.scrollWidth <= els.timelineScroll.clientWidth + 2) {
+    els.timelineScroll.scrollLeft = 0;
+    return;
+  }
   const index = Math.round((TODAY - VIEW_START) / DAY);
-  const unit = zoomLevels[zoomIndex];
+  const unit = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--timeline-unit')) || fitTimelineUnit();
   const target = index * unit - els.timelineScroll.clientWidth * 0.36;
   els.timelineScroll.scrollLeft = Math.max(0, target);
 }
@@ -76,8 +87,10 @@ function init() {
   els.workspaceName.textContent = state.workspace.name;
   refreshTimelineView();
   bindEvents();
-  updateZoom(zoomIndex, false);
-  requestAnimationFrame(centerToday);
+  requestAnimationFrame(() => {
+    updateZoom(zoomIndex, false);
+    centerToday();
+  });
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     navigator.serviceWorker.register('./service-worker.js').catch(() => {});
   }
