@@ -11,6 +11,17 @@ function handleAiSubmit(text) {
     return;
   }
 
+  if (proposal.type === 'resolution') {
+    const jump = proposal.role && proposal.task ? '<div class="ai-confirmation"><button type="button" class="primary" data-open-resolution>Voir les actions</button></div>' : '';
+    const message = appendAiMessage('assistant', `<p>${proposal.message}</p>${jump}`);
+    $('[data-open-resolution]', message)?.addEventListener('click', () => {
+      closeAi();
+      if (!els.focus.classList.contains('is-open')) openProject(proposal.project.id);
+      requestAnimationFrame(() => openRole(proposal.project, proposal.role.id));
+    });
+    return;
+  }
+
   const confirmation = proposal.type === 'task-update'
     ? `<div class="ai-confirmation"><button type="button" class="primary" data-ai-confirm="yes">Confirmer</button><button type="button" data-ai-confirm="no">Non</button></div>`
     : proposal.type === 'project-create'
