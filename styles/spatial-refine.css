@@ -1,5 +1,6 @@
 /* Final spatial refinements. */
 .focus-shell.spatial-shell{background:linear-gradient(180deg,rgba(7,19,33,.965),rgba(6,16,28,.985));backdrop-filter:blur(12px)}
+.project-path.spatial-path::after{width:var(--route-progress);max-width:92%}
 .spatial-blocker{left:clamp(110px,var(--blocker-x),calc(100% - 110px))!important}
 .spatial-blocker::after{height:72px}
 .spatial-role .role-connector{height:150px}
