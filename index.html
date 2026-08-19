@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#07111f" />
-  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="color-scheme" content="light" />
   <meta name="description" content="Neptune Projets — pilotage visuel des projets." />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="manifest" href="./manifest.webmanifest" />
@@ -13,50 +13,45 @@
   <title>Neptune Projets</title>
 </head>
 <body>
-  <a class="skip-link" href="#project-map">Aller à la carte des projets</a>
-
+  <a class="skip-link" href="#project-map">Aller aux projets</a>
   <div id="app" class="app-shell" data-density="comfortable">
     <header class="topbar" aria-label="Navigation principale">
       <div class="brand-cluster">
         <button class="brand-mark" type="button" aria-label="Accueil Neptune Projets"><span aria-hidden="true">N</span></button>
         <button id="workspace-trigger" class="workspace-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-          <span class="workspace-kicker">Espace</span>
-          <span class="workspace-name" id="workspace-name">Neptune</span>
+          <span class="workspace-kicker">Espace</span><span class="workspace-name" id="workspace-name">Neptune</span>
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>
         </button>
       </div>
-
-      <div class="topbar-center" aria-live="polite"><span class="context-dot"></span><span id="context-label">Carte des projets</span></div>
-
+      <div class="topbar-center" aria-live="polite"><span id="context-label">Projets</span></div>
       <div class="topbar-actions">
         <button id="search-trigger" class="icon-button" type="button" aria-label="Rechercher"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.25 4.25"/></svg></button>
-        <button id="people-trigger" class="people-button" type="button" aria-label="Équipe et présence">
-          <span class="avatar-stack" aria-hidden="true"><span class="mini-avatar avatar-a">L</span><span class="mini-avatar avatar-b">J</span><span class="mini-avatar avatar-c">A</span></span>
-          <span class="people-count">+5</span>
-        </button>
-        <button id="settings-trigger" class="icon-button" type="button" aria-label="Réglages"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="M19.2 13.4c.04-.46.04-.93 0-1.4l2-1.55-2-3.45-2.5 1a7.5 7.5 0 0 0-1.2-.7L15.1 4h-4l-.4 3.3c-.42.2-.82.44-1.2.7L7 7l-2 3.45L7 12a8.8 8.8 0 0 0 0 1.4l-2 1.55L7 18.4l2.5-1c.38.28.78.52 1.2.72l.4 3.28h4l.4-3.28c.42-.2.82-.44 1.2-.72l2.5 1 2-3.45-2-1.55Z"/></svg></button>
+        <button id="people-trigger" class="people-button" type="button" aria-label="Équipe"><span class="avatar-stack" aria-hidden="true"><span class="mini-avatar avatar-a">L</span><span class="mini-avatar avatar-b">J</span><span class="mini-avatar avatar-c">A</span></span><span class="people-count">+5</span></button>
+        <button id="settings-trigger" class="icon-button" type="button" aria-label="Réglages"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="M19.2 13.4c.04-.46.04-.93 0-1.4l2-1.55-2-3.45-2.5 1a7.5 7.5 0 0 0-1.2-.7L15.1 4h-4l-.4 3.3c-.42.2-.82.44-1.2.7L7 7l-2 3.45L7 12a8.8 8.8 0 0 0 0 1.4l-2 1.55L7 18.4l2.5-1c.38.28.78.52 1.2.72l.4 3.28h4l.4-3.28c.42-.2.82-.44 1.2-.72l2.5 1 2-3.45-2-1.55-2-1.55Z"/></svg></button>
       </div>
     </header>
 
     <main class="main-stage">
-      <section class="map-header" aria-labelledby="map-title">
-        <div><p class="eyebrow">Vue globale</p><h1 id="map-title">Tout ce qui avance. Tout ce qui bloque.</h1><p class="map-subtitle">La carte se met à jour depuis les tâches, les dépendances et Neptune.</p></div>
-        <div class="map-controls" aria-label="Contrôles de la carte">
+      <section class="map-header" aria-label="Outils projets">
+        <div class="map-controls">
           <div class="filter-pills" role="group" aria-label="Filtrer les projets">
-            <button class="filter-pill is-active" type="button" data-filter="all">Tout</button>
+            <button class="filter-pill is-active" type="button" data-filter="all">Tous</button>
             <button class="filter-pill" type="button" data-filter="attention"><span class="status-pin attention"></span>À surveiller</button>
             <button class="filter-pill" type="button" data-filter="blocked"><span class="status-pin blocked"></span>Bloqués</button>
             <button class="filter-pill" type="button" data-filter="waiting"><span class="status-pin waiting"></span>En attente</button>
             <button class="filter-pill" type="button" data-filter="upcoming"><span class="status-pin upcoming"></span>À venir</button>
           </div>
-          <div class="zoom-control" role="group" aria-label="Zoom temporel"><button id="zoom-out" type="button" aria-label="Dézoomer">−</button><button id="zoom-reset" class="zoom-label" type="button" aria-label="Voir toute la période">Tout</button><button id="zoom-in" type="button" aria-label="Zoomer">+</button></div>
+          <div class="map-actions">
+            <div class="zoom-control" role="group" aria-label="Zoom temporel"><button id="zoom-out" type="button" aria-label="Dézoomer">−</button><button id="zoom-reset" class="zoom-label" type="button">Tout</button><button id="zoom-in" type="button" aria-label="Zoomer">+</button></div>
+            <button id="add-project-trigger" class="primary-project-action" type="button"><span>＋</span> Projet</button>
+          </div>
         </div>
       </section>
 
-      <section id="project-map" class="project-map" aria-label="Carte temporelle des projets" tabindex="-1">
+      <section id="project-map" class="project-map" aria-label="Planning des projets" tabindex="-1">
         <div id="timeline-scroll" class="timeline-scroll" tabindex="0" aria-label="Timeline des projets">
           <div id="timeline-canvas" class="timeline-canvas">
-            <div class="timeline-header"><div class="project-column-title">Projets</div><div id="month-scale" class="month-scale" aria-hidden="true"></div></div>
+            <div class="timeline-header"><div class="project-column-title">Projet</div><div id="month-scale" class="month-scale" aria-hidden="true"></div></div>
             <div id="today-line" class="today-line" aria-hidden="true"><span>Aujourd’hui</span></div>
             <div id="project-rows" class="project-rows"></div>
           </div>
@@ -64,65 +59,44 @@
       </section>
     </main>
 
-    <button id="ai-orb" class="ai-orb" type="button" aria-label="Ouvrir Neptune" aria-expanded="false"><span class="orb-core" aria-hidden="true"></span><span class="orb-label">Neptune</span></button>
-
+    <button id="ai-orb" class="ai-orb" type="button" aria-label="Ouvrir Neptune" aria-expanded="false"><span class="orb-core" aria-hidden="true"></span></button>
     <aside id="ai-panel" class="ai-panel" aria-hidden="true" aria-label="Neptune">
-      <div class="ai-panel-header"><div><p class="eyebrow">Neptune</p><h2>Qu’est-ce qui a bougé ?</h2></div><button id="ai-close" class="icon-button" type="button" aria-label="Fermer Neptune"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+      <div class="ai-panel-header"><div><h2>Neptune</h2></div><button id="ai-close" class="icon-button" type="button" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
       <div id="ai-thread" class="ai-thread" aria-live="polite"></div>
-      <form id="ai-form" class="ai-composer">
-        <label class="sr-only" for="ai-input">Message à Neptune</label>
-        <textarea id="ai-input" rows="1" placeholder="Dis simplement ce qui a changé…"></textarea>
-        <div class="composer-actions"><span class="composer-hint">Entrée pour envoyer</span><button class="send-button" type="submit" aria-label="Envoyer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14-7-4 14-3.5-5.5L5 12Z"/><path d="m11.5 13.5 3.5-3.5"/></svg></button></div>
-      </form>
+      <form id="ai-form" class="ai-composer"><label class="sr-only" for="ai-input">Message à Neptune</label><textarea id="ai-input" rows="1" placeholder="Dis ce qui a changé…"></textarea><div class="composer-actions"><button class="send-button" type="submit" aria-label="Envoyer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14-7-4 14-3.5-5.5L5 12Z"/></svg></button></div></form>
     </aside>
 
-    <section id="project-focus" class="project-focus" aria-hidden="true" aria-label="Carte locale du projet">
-      <div class="focus-shell spatial-shell">
-        <header class="focus-header spatial-header">
-          <button id="focus-close" class="back-button" type="button" aria-label="Dézoomer vers la carte des projets"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg><span>Carte</span></button>
-          <div class="spatial-project-identity">
-            <span id="focus-status" class="human-status"></span>
-            <strong id="focus-project-title">Projet</strong>
-            <span class="spatial-deadline"><span id="focus-deadline">—</span><span id="focus-deadline-note">—</span></span>
-          </div>
-          <button id="focus-ask-ai" class="secondary-action" type="button" aria-label="Parler à Neptune pour ce projet"><span class="tiny-orb" aria-hidden="true"></span><span>Neptune</span></button>
-          <span id="focus-breadcrumb-name" class="sr-only">Projet</span>
-          <p id="focus-project-summary" class="sr-only"></p>
-        </header>
+    <section id="project-focus" class="project-focus project-side-panel" aria-hidden="true" aria-label="Projet">
+      <header class="side-panel-header">
+        <div class="side-panel-title"><span id="focus-status" class="human-status"></span><input id="project-name-input" class="project-name-input" aria-label="Nom du projet" /></div>
+        <button id="focus-close" class="icon-button" type="button" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <span id="focus-project-title" class="sr-only"></span><span id="focus-breadcrumb-name" class="sr-only"></span><p id="focus-project-summary" class="sr-only"></p><span id="focus-deadline" class="sr-only"></span><span id="focus-deadline-note" class="sr-only"></span>
+      </header>
 
-        <div class="focus-main spatial-main">
-          <div class="spatial-grid" aria-hidden="true"></div>
-          <div class="spatial-halo halo-a" aria-hidden="true"></div><div class="spatial-halo halo-b" aria-hidden="true"></div>
+      <div class="side-panel-body">
+        <section class="project-fields-grid" aria-label="Informations du projet">
+          <label>Statut<select id="project-status-select"><option value="fluid">Fluide</option><option value="attention">À surveiller</option><option value="blocked">Bloqué</option><option value="waiting">En attente</option><option value="upcoming">À venir</option></select></label>
+          <label>Début<input id="project-start-input" type="date" /></label>
+          <label>Fin<input id="project-end-input" type="date" /></label>
+          <label class="field-wide">Point actuel<input id="project-reason-input" type="text" maxlength="120" /></label>
+        </section>
 
-          <section class="route-zone" aria-label="Chemin du projet">
-            <div class="project-path-wrap"><div id="project-path" class="project-path spatial-path" aria-label="Étapes du projet"></div></div>
-          </section>
+        <section class="side-section stages-section"><div class="side-section-heading"><strong>Étapes</strong></div><div id="project-path" class="project-path panel-path"></div></section>
+        <section class="side-section blockers-section"><div class="side-section-heading"><strong>À débloquer</strong><span id="blocker-count"></span></div><div id="blocker-list" class="blocker-list"></div></section>
+        <section class="side-section people-section"><div class="side-section-heading"><strong>Équipe</strong><span>Cliquer = tâches</span></div><div id="role-orbit" class="role-orbit panel-people"></div></section>
 
-          <section class="blocker-zone spatial-blockers" aria-label="Blocages">
-            <span id="blocker-count" class="sr-only"></span>
-            <div id="blocker-list" class="blocker-list"></div>
-          </section>
-
-          <section class="people-zone spatial-people" aria-label="Responsables">
-            <div id="role-orbit" class="role-orbit"></div>
-          </section>
-
-          <section id="task-drawer" class="task-drawer spatial-actions" aria-hidden="true">
-            <div class="task-drawer-header"><div><span class="action-context">Actions</span><h3 id="task-drawer-title">Responsable</h3></div><button id="task-drawer-close" class="icon-button" type="button" aria-label="Fermer les actions"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-            <div id="task-list" class="task-list"></div>
-            <button id="role-ask-ai" class="context-ai-button" type="button"><span class="tiny-orb" aria-hidden="true"></span><span>Agir avec Neptune</span></button>
-          </section>
-        </div>
+        <section id="task-drawer" class="task-drawer panel-tasks" aria-hidden="true">
+          <div class="task-drawer-header"><div><span class="action-context">Tâches</span><h3 id="task-drawer-title">Responsable</h3></div><button id="task-drawer-close" class="icon-button" type="button" aria-label="Fermer les tâches"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+          <div id="task-list" class="task-list"></div>
+          <button id="add-task-trigger" class="add-task-button" type="button">＋ Ajouter une tâche</button>
+          <button id="role-ask-ai" class="context-ai-button" type="button"><span class="tiny-orb" aria-hidden="true"></span><span>Neptune</span></button>
+        </section>
       </div>
     </section>
 
-    <dialog id="search-dialog" class="command-dialog">
-      <form method="dialog" class="command-dialog-shell"><div class="command-search-row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.25 4.25"/></svg><input id="global-search" type="search" autocomplete="off" placeholder="Projet, personne, tâche…" /><kbd>Esc</kbd></div><div id="search-results" class="search-results"></div></form>
-    </dialog>
-
+    <dialog id="search-dialog" class="command-dialog"><form method="dialog" class="command-dialog-shell"><div class="command-search-row"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.25 4.25"/></svg><input id="global-search" type="search" autocomplete="off" placeholder="Projet, personne, tâche…" /><kbd>Esc</kbd></div><div id="search-results" class="search-results"></div></form></dialog>
     <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
   </div>
-
   <script type="module" src="./app.js"></script>
 </body>
 </html>
