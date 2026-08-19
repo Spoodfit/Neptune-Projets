@@ -1,8 +1,8 @@
-const CACHE = 'neptune-projets-front-v8';
+const CACHE = 'neptune-projets-front-v9';
 const ASSETS = [
   './', './index.html', './styles.css',
   './styles/base.css', './styles/timeline.css', './styles/panels.css', './styles/responsive.css', './styles/utility.css', './styles/canva-light.css',
-  './app.js', './app/core.js', './app/timeline.js', './app/project.js', './app/ai-parse.js', './app/ai-ui.js', './app/main.js',
+  './app.js', './app/core.js', './app/timeline.js', './app/project.js', './app/ai-parse.js', './app/ai-ui.js', './app/direct-actions.js', './app/main.js',
   './data.js', './manifest.webmanifest', './assets/favicon.svg',
 ];
 self.addEventListener('install', (event) => { event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS))); });
