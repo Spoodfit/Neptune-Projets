@@ -1,4 +1,4 @@
-const CACHE = 'neptune-projets-front-v4';
+const CACHE = 'neptune-projets-front-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ const ASSETS = [
   './styles/utility.css',
   './styles/compact.css',
   './styles/cockpit.css',
+  './styles/spatial.css',
   './app.js',
   './app/core.js',
   './app/timeline.js',
