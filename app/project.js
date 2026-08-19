@@ -32,37 +32,37 @@ function renderFocus(project) {
   els.focusDeadline.textContent = formatDate(project.end, { year: project.end.startsWith('2027') ? 'numeric' : undefined });
   els.focusDeadlineNote.textContent = project.deadlineNote;
   els.focusBreadcrumbName.textContent = project.name;
-  els.focusStatus.innerHTML = `<i class="state-dot ${project.status}"></i>${escapeHtml(statusLabels[project.status])} · ${escapeHtml(project.stateText.split('·').slice(1).join('·').trim() || project.stateText)}`;
+  const reason = project.stateText.includes('·') ? project.stateText.split('·').slice(1).join('·').trim() : statusLabels[project.status];
+  els.focusStatus.innerHTML = `<i class="state-dot ${project.status}"></i>${escapeHtml(reason)}`;
 
   els.projectPath.innerHTML = project.stages.map((stage) => `
-    <div class="path-step ${stage.state}">
+    <div class="path-step ${stage.state}" title="${escapeHtml(stage.note)}">
       <span class="path-node">${stage.state === 'done' ? icons.check : stage.state === 'blocked' ? icons.alert : stage.state === 'current' ? icons.spark : icons.dot}</span>
       <span class="path-copy"><strong>${escapeHtml(stage.label)}</strong><span>${escapeHtml(stage.note)}</span></span>
     </div>`).join('');
 
   if (project.blockers.length) {
-    els.blockerCount.textContent = `${project.blockers.length} point${project.blockers.length > 1 ? 's' : ''}`;
+    els.blockerCount.textContent = `${project.blockers.length}`;
     els.blockerList.innerHTML = project.blockers.map((blocker) => `
-      <article class="blocker-card">
+      <article class="blocker-card" title="${escapeHtml(blocker.detail)}" aria-label="${escapeHtml(blocker.title)}. ${escapeHtml(blocker.detail)}">
         <span class="blocker-icon">${icons.alert}</span>
-        <div class="blocker-copy"><strong>${escapeHtml(blocker.title)}</strong><p>${escapeHtml(blocker.detail)}</p></div>
+        <div class="blocker-copy"><strong>${escapeHtml(blocker.title)}</strong></div>
         <span class="blocker-owner">${escapeHtml(blocker.owner)}</span>
       </article>`).join('');
   } else {
-    els.blockerCount.textContent = 'Aucun blocage';
-    els.blockerList.innerHTML = `<article class="blocker-card is-empty"><span class="blocker-icon">${icons.check}</span><div class="blocker-copy"><strong>Rien ne bloque le chemin critique</strong><p>L’outil ne te demande rien ici. Il continuera simplement à surveiller les dépendances.</p></div></article>`;
+    els.blockerCount.textContent = '0';
+    els.blockerList.innerHTML = `<article class="blocker-card is-empty"><span class="blocker-icon">${icons.check}</span><div class="blocker-copy"><strong>Aucun blocage</strong></div></article>`;
   }
 
   els.roleOrbit.innerHTML = project.roles.map((role) => {
     const remaining = role.tasks.filter((task) => task.status !== 'done').length;
     const stateClass = role.state === 'blocker' ? 'has-blocker' : role.state === 'warning' ? 'has-warning' : '';
-    const stateText = role.state === 'blocker' ? 'Un blocage' : role.state === 'warning' ? 'À surveiller' : remaining ? `${remaining} action${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''}` : 'Rien à faire';
-    return `<button class="role-card ${stateClass}" type="button" data-role-id="${escapeHtml(role.id)}">
+    const stateText = role.state === 'blocker' ? 'Bloqué' : role.state === 'warning' ? 'Alerte' : remaining ? `${remaining} à faire` : 'OK';
+    return `<button class="role-card ${stateClass}" type="button" data-role-id="${escapeHtml(role.id)}" title="${escapeHtml(role.message)}">
       <span class="role-person">
         <span class="role-avatar" style="background:${toneGradient(role.tone)}">${escapeHtml(role.initials)}</span>
         <span class="role-person-copy"><strong>${escapeHtml(role.name)}</strong><span>${escapeHtml(role.role)}</span></span>
       </span>
-      <p class="role-message">${escapeHtml(role.message)}</p>
       <span class="role-foot"><span class="work-state"><i></i>${escapeHtml(stateText)}</span><span class="role-arrow">›</span></span>
     </button>`;
   }).join('');
@@ -79,15 +79,14 @@ function openRole(project, roleId) {
   els.taskDrawerTitle.textContent = `${role.name} · ${role.role}`;
   els.taskList.innerHTML = role.tasks.map((task, index) => {
     const meta = taskMeta(task.status);
-    return `<article class="task-row" data-task-index="${index}">
+    return `<article class="task-row" data-task-index="${index}" title="${escapeHtml(task.note)}">
       <span class="task-state-icon ${escapeHtml(task.status)}">${meta.icon}</span>
-      <span class="task-copy"><strong>${escapeHtml(task.title)}</strong><span>${escapeHtml(task.note)}</span></span>
+      <span class="task-copy"><strong>${escapeHtml(task.title)}</strong></span>
       <span class="task-date${task.status === 'blocked' ? ' late' : ''}">${escapeHtml(task.due)}</span>
     </article>`;
   }).join('');
   els.taskDrawer.classList.add('is-open');
   els.taskDrawer.setAttribute('aria-hidden', 'false');
-  els.taskDrawer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function taskMeta(status) {
