@@ -10,6 +10,7 @@ const sources = [
   './app/project.js',
   './app/ai-parse.js',
   './app/ai-ui.js',
+  './app/spatial-actions.js',
   './app/main.js',
 ];
 
