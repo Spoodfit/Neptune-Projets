@@ -7,8 +7,8 @@ const TODAY = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 let VIEW_START = new Date(TODAY.getFullYear(), TODAY.getMonth() - 1, 1);
 let VIEW_END = new Date(TODAY.getFullYear(), TODAY.getMonth() + 5, 0);
 let TOTAL_DAYS = Math.round((VIEW_END - VIEW_START) / DAY) + 1;
-const zoomLevels = [5.8, 7.2, 9, 11.5, 14];
-let zoomIndex = 2;
+const zoomLevels = [1, 1.25, 1.55, 1.95, 2.5];
+let zoomIndex = 0;
 let activeFilter = 'all';
 let activeProjectId = null;
 let activeRoleId = null;
@@ -110,6 +110,7 @@ function persistState() {
     customProjectSets,
   }));
 }
+
 function recalculateTimelineBounds() {
   const projectDates = state.projects.flatMap((project) => [new Date(`${project.start}T00:00:00`), new Date(`${project.end}T00:00:00`)]).filter((date) => !Number.isNaN(date.getTime()));
   const allDates = [TODAY, ...projectDates];
@@ -121,6 +122,12 @@ function recalculateTimelineBounds() {
   VIEW_END = dataEnd > sixMonthEnd ? dataEnd : sixMonthEnd;
   TOTAL_DAYS = Math.round((VIEW_END - VIEW_START) / DAY) + 1;
   css.setProperty('--timeline-days', TOTAL_DAYS);
+}
+
+function fitTimelineUnit() {
+  const projectColumn = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--project-col')) || 210;
+  const viewport = Math.max(1, els.timelineScroll.clientWidth - projectColumn - 2);
+  return Math.max(0.85, viewport / Math.max(1, TOTAL_DAYS));
 }
 
 function refreshTimelineView() {
